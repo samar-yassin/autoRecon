@@ -1,12 +1,17 @@
 # autoRecon
 
-this tool helps you to save your time doing usual reconnaissance.
+this tool helps you saving your time doing usual reconnaissance.
 all you need is to provide it with the ip address you want.
-- run **nmap scan** to find open ports
-- run **dirb** to obtain the hidden directories
-- check if **wordpress** is running and run wpscan
-- check for **robots.txt** file
 
 ## usage :
-scan.py -i {IP}
+python2 recon.py -i {IP}
 
+## Example of result:
+![alt text](https://i.imgur.com/qFsmGDI.png)
+![alt text](https://i.imgur.com/roIFsto.png)
+
+## software requirements
+- python2
+- nmap
+- dirb
+- wpscsn
