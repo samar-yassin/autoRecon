@@ -2,6 +2,8 @@
 
 import sys, getopt,os,requests
 
+#raven IP : 192.168.53.130
+
 def main(argv):
    try:
       opts, args = getopt.getopt(argv,"h:i:")
@@ -17,6 +19,7 @@ def main(argv):
          ip=arg;
          #first command to run "nmap"
          command = "nmap -A "+ip;
+         print("\n\nrunning nmap...")
          stream = os.popen(command)
          nmapOutput = stream.read()
          
@@ -28,31 +31,44 @@ def main(argv):
             if "open" in item:
                cOutput+=item.strip()+"\n"
          if(cOutput != ''):
-            print("open ports :")
+            print("\n\n\nopen ports :")
             print (cOutput)
          else :
-            print("no open ports")
+            print("\n\n\nno open ports")
             sys.exit()
 
          #check port 80
          if "80" in cOutput:
             command = "dirb http://"+ip
+            print("\n\nrunning dirb...")
             stream = os.popen(command)
-            scan80 = stream.read()
+            dirbOutput = stream.read()
+            print("\n\n\ndirb result :\n")
+            cOutput='';
+            for item in dirbOutput.split("\n"):
+               if "==> DIRECTORY: " in item :
+                  cOutput+=item.strip()+"\n"
+
+            if(cOutput != ''):
+               print("Directories :")
+               print (cOutput)
+
 
             #check if there's wordpress running
-            if "wordpress" in scan80:
-               command = "wpscan --url "+ip+"/wordpress/ -e"
+            if "wordpress" in dirbOutput:
+               print("\n\nrunning wpscan...")
+               command = "wpscan --url "+ip+"/wordpress/ -e --update"
                stream = os.popen(command)
                wpscan = stream.read()
-               print("wordpress scan :")
+               print("\n\n\nwordpress result :")
                print(wpscan)
 
             #check robots.txt file
             url = "http://"+ip+"/robots.txt"
             res = requests.get(url)
-            if(res.status_code == 200)
-               print res.text;
+            if(res.status_code == 200):
+               print ("\n\n\nrobots.txt file :")
+               print (res.text);
 
 
 
